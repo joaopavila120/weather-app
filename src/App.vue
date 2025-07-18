@@ -4,8 +4,8 @@
 
     <SearchBar @search="onSearch" />
 
-    <div v-if="loading" class="status">Loading…</div>
-    <div v-if="error"   class="status error">{{ error }}</div>
+    <div v-if="loading || loadingSearch" class="status">Loading…</div>
+    <div v-if="error"               class="status error">{{ error }}</div>
 
     <CurrentWeather :data="current" />
 
@@ -26,6 +26,7 @@
 import { useWeather }            from '@/composables/useWeather'
 import { useForecastTransform }  from '@/composables/useForecastTransform'
 import { useInitialWeather }     from '@/composables/useInitialWeather'
+import { useSearch }             from '@/composables/useSearch'
 import { getForecastByCity, getForecastByCoords } from '@/weatherService.js'
 
 import SearchBar        from '@/components/SearchBar.vue'
@@ -33,7 +34,7 @@ import CurrentWeather   from '@/components/CurrentWeather.vue'
 import ForecastSection  from '@/components/ForecastSection.vue'
 import FallbackCities   from '@/components/FallbackCities.vue'
 
-/** hook - fetch */
+/** Hook que lida com estado básico e fetch de current/forecast */
 const {
   current,
   forecast,
@@ -43,47 +44,32 @@ const {
   fetchByCoords
 } = useWeather()
 
-/** hook  */
+/** Hook para montar o resumo diário do forecast */
 const { transform } = useForecastTransform()
 
-/** hook  */
+/** Hook que carrega dados iniciais (geo + fallback) */
 const { fallback, weekly, reloadFallback } = useInitialWeather(
   {
-    fetchCurrentByCoords: fetchByCoords,
+    // CORREÇÃO: usar as funções de forecast do weatherService
+    fetchCurrentByCoords:  fetchByCoords,
     fetchForecastByCoords: getForecastByCoords,
+
     fetchCurrentByCity:    fetchByCity,
     fetchForecastByCity:   getForecastByCity
   },
   transform
 )
 
-/** shuffle city (update button) */
+/** Hook + scroll */
+const { onSearch, loadingSearch } = useSearch(
+  { fetchByCity, fetchByCoords },
+  transform,
+  weekly
+)
+
+/** Shuffle (udate icon) suggested cities */
 async function shuffleCities() {
   await reloadFallback()
-}
-
-/** handler unificado de busca: city string | city obj | coords obj */
-async function onSearch(payload) {
-
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  if (typeof payload === 'string') {
-    await fetchByCity(payload)
-    const raw = await getForecastByCity(payload)
-    weekly.value = transform(raw)
-
-  } else if (payload.name) {
-    const name = `${payload.name},${payload.country}`
-    await fetchByCity(name)
-    const raw = await getForecastByCity(name)
-    weekly.value = transform(raw)
-
-  } else if (payload.latitude && payload.longitude) {
-    await fetchByCoords(payload.latitude, payload.longitude)
-    const raw = await getForecastByCoords(payload.latitude, payload.longitude)
-    weekly.value = transform(raw)
-  }
-
-
 }
 </script>
 
@@ -93,7 +79,7 @@ async function onSearch(payload) {
 .status     { margin-top: 1rem; color: #555; }
 .status.error { color: red; }
 
-/* fade transition (kept)) */
+/* fade transition (mantido) */
 .fade-enter-active {
   transition: opacity 0.4s ease, transform 0.4s ease;
 }

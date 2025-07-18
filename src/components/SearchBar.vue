@@ -4,7 +4,7 @@
       v-model="term"
       @input="onInput"
       @keydown.enter.prevent="select(suggestions[0])"
-      placeholder="Search city... (ex: Lisbon, Passo, Cairo...)"
+      placeholder="Search city... (ex: Lisbon, Passo Fundo, Cairo...)"
     />
     <button @click="select(suggestions[0])">Search</button>
   </div>

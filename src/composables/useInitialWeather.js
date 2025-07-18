@@ -20,17 +20,17 @@ export function useInitialWeather(
   const { list: fallback, loadRandom } = useFallbackCities()
 
   onMounted(async () => {
-    await loadRandom()  // popula lista de fallback
+    await loadRandom()  
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        // se geolocalização OK
+        // if geolocation ok
         async ({ coords }) => {
           await fetchCurrentByCoords(coords.latitude, coords.longitude)
           const raw = await fetchForecastByCoords(coords.latitude, coords.longitude)
           weekly.value = transform(raw)
         },
-        // se falha → fallback
+        // if fail =  fallback
         async () => {
           const city = fallback.value[0]
           const name = `${city.name},${city.country}`
@@ -40,7 +40,7 @@ export function useInitialWeather(
         }
       )
     } else {
-      // sem API de geolocalização → fallback
+      // no geolocation api
       const city = fallback.value[0]
       const name = `${city.name},${city.country}`
       await fetchCurrentByCity(name)
@@ -49,7 +49,7 @@ export function useInitialWeather(
     }
   })
 
-  /** Recarrega uma nova lista de cidades de fallback */
+  /** reload suggested citiies*/
   async function reloadFallback() {
     await loadRandom()
   }
