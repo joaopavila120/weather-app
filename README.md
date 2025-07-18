@@ -48,6 +48,8 @@ To create a production build:
 npm run build
 ```
 
-## License
+## Printscreens: 
+<img width="1295" height="865" alt="image" src="https://github.com/user-attachments/assets/86154b81-f929-4e84-89e5-08f082723d1b" />
 
-MIT © [Your Name]
+<img width="1160" height="903" alt="image" src="https://github.com/user-attachments/assets/2c630d6d-5d7e-46d6-93bf-6434e2f927da" />
+
