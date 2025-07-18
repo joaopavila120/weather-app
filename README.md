@@ -17,7 +17,7 @@ A simple Vue 3 weather dashboard that fetches current weather and a 5‑day fo
 
 1. **Clone the repo**  
    ```bash
-   git clone https://github.com/your-username/weather-dashboard.git
+   git clone https://github.com/joaopavila120/weather-app
    cd weather-dashboard
    ```
 
