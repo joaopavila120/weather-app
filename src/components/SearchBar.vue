@@ -23,7 +23,7 @@
 <script setup>
 import { ref } from 'vue'
 import debounce from 'lodash.debounce'
-import { searchCities } from '../services/weatherService.js'
+import { searchCities } from '../weatherService.js'
 
 
 

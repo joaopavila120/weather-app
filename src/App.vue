@@ -12,7 +12,7 @@
 
     <div v-if="current && current.name">
       <button @click="showForecast = !showForecast" class="btn-toggle">
-        {{ showForecast ? 'Ocultar previsão de 5 dias' : 'Mostrar previsão de 5 dias' }}
+        {{ showForecast ? 'Hide' : 'Show next 5 days' }}
       </button>
 
       <transition-group name="fade" tag="div" class="forecast-grid">
@@ -26,7 +26,7 @@
     </div>
 
     <section v-if="fallback.length" class="fallback">
-      <h2>Explore outras cidades</h2>
+      <h2>Explore other cities</h2>
       <div class="city-grid">
         <CityCard
           v-for="c in fallback"
@@ -81,7 +81,7 @@ function transformForecast(raw) {
     .filter(([date]) => date > today)
     .slice(0, 5)
     .map(([date, entries]) => ({
-      day: new Date(date).toLocaleDateString('pt-BR', { weekday: 'long' }),
+      day: new Date(date).toLocaleDateString('eng', { weekday: 'long' }),
       description: entries[0].weather[0].description,
       tempMax: Math.round(Math.max(...entries.map(e => e.main.temp))),
       tempMin: Math.round(Math.min(...entries.map(e => e.main.temp))),

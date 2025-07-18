@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import {  getWeatherByCity,
   getForecastByCity,
   getWeatherByCoords,
-  getForecastByCoords } from '../services/weatherService.js';
+  getForecastByCoords } from '../weatherService.js';
 
 
 

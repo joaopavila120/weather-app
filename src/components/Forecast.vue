@@ -1,7 +1,8 @@
 <template>
   <div v-if="fd" class="forecast">
-    <div
-      v-for="item in fd.list"
+    <!--limit 5 hours-->
+    <div 
+      v-for="item in fd.list.slice(0,5)" 
       :key="item.dt"
       class="forecast-item"
     >

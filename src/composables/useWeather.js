@@ -4,7 +4,7 @@ import {
   getForecastByCity,
   getWeatherByCoords,
   getForecastByCoords,
-} from '../services/weatherService.js'
+} from '../weatherService.js'
 
 export function useWeather() {
   const current = ref(null)
