@@ -32,22 +32,19 @@ export async function getForecastByCoords(lat, lon) {
 // city autocomplete
 // src/services/weatherService.js
 export async function searchCities(query) {
-  const url = `https://api.openweathermap.org/geo/1.0/direct` +
-              `?q=${encodeURIComponent(query)}` +
-              `&limit=5&appid=${KEY}`
+  const url = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(query)}&limit=5&appid=${KEY}`
   const { data } = await axios.get(url)
 
-  // Exact filter for the city names (name 1:1, without case‑sensitivity)
-  const exact = data.filter(
-    item => item.name.toLowerCase() === query.toLowerCase()
-  )
+  const uniqueCities = []
+  const citySet = new Set()
 
-  //  if its correct, returns the exact name
-  if (exact.length) {
-    return exact
-  }
+  data.forEach(item => {
+    const cityKey = `${item.name},${item.country}`
+    if (!citySet.has(cityKey)) {
+      uniqueCities.push(item)
+      citySet.add(cityKey)
+    }
+  })
 
-  // if not, return it back 5 close names
-  return data
+  return uniqueCities
 }
-
