@@ -10,7 +10,7 @@
       v-for="(day, i) in show ? weekly : []"
       :key="day.day"
       :forecast="[day]"
-      :style="{ transitionDelay: `${i * 100}ms` }"
+      :style="{ transitionDelay: `${i * 120}ms` }"
     />
   </transition-group>
 </template>

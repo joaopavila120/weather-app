@@ -34,7 +34,7 @@ import CurrentWeather   from '@/components/CurrentWeather.vue'
 import ForecastSection  from '@/components/ForecastSection.vue'
 import FallbackCities   from '@/components/FallbackCities.vue'
 
-/** Hook que lida com estado básico e fetch de current/forecast */
+/** Hook current/forecast */
 const {
   current,
   forecast,
@@ -44,13 +44,12 @@ const {
   fetchByCoords
 } = useWeather()
 
-/** Hook para montar o resumo diário do forecast */
+/** Hook */
 const { transform } = useForecastTransform()
 
-/** Hook que carrega dados iniciais (geo + fallback) */
+/** Hook (geo + fallback) */
 const { fallback, weekly, reloadFallback } = useInitialWeather(
   {
-    // CORREÇÃO: usar as funções de forecast do weatherService
     fetchCurrentByCoords:  fetchByCoords,
     fetchForecastByCoords: getForecastByCoords,
 
