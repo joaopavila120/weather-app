@@ -34,7 +34,6 @@ import CurrentWeather   from '@/components/CurrentWeather.vue'
 import ForecastSection  from '@/components/ForecastSection.vue'
 import FallbackCities   from '@/components/FallbackCities.vue'
 
-/** Hook current/forecast */
 const {
   current,
   forecast,
@@ -44,29 +43,37 @@ const {
   fetchByCoords
 } = useWeather()
 
-/** Hook */
 const { transform } = useForecastTransform()
 
-/** Hook (geo + fallback) */
 const { fallback, weekly, reloadFallback } = useInitialWeather(
   {
     fetchCurrentByCoords:  fetchByCoords,
     fetchForecastByCoords: getForecastByCoords,
-
     fetchCurrentByCity:    fetchByCity,
     fetchForecastByCity:   getForecastByCity
   },
   transform
 )
 
-/** Hook + scroll */
-const { onSearch, loadingSearch } = useSearch(
+const { onSearch: executeSearch, loadingSearch } = useSearch(
   { fetchByCity, fetchByCoords },
   transform,
   weekly
 )
 
-/** Shuffle (udate icon) suggested cities */
+/** Valida qualquer payload “vazio” ou indefinido antes de buscar */
+async function onSearch(payload) {
+  // Bloqueia undefined/null ou string vazia
+  if (!payload || (typeof payload === 'string' && !payload.trim())) {
+    error.value = 'Por favor, informe uma cidade.'
+    return
+  }
+  // Limpa erro anterior
+  error.value = null
+  // Dispara a busca real
+  await executeSearch(payload)
+}
+
 async function shuffleCities() {
   await reloadFallback()
 }

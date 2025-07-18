@@ -10,7 +10,7 @@ export function useSearch({ fetchByCity, fetchByCoords }, transform, weekly) {
   const loadingSearch = ref(false)
   async function onSearch(payload) {
     loadingSearch.value = true
-    //scroll to top
+    //scroll to
     window.scrollTo({ top: 0, behavior: 'smooth' })
 
     if (typeof payload === 'string') {
