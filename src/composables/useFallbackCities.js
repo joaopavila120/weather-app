@@ -6,7 +6,10 @@ import {  getWeatherByCity,
 
 
 
-const ALL_CITIES = ['Lisbon','New York','Tokyo','Paris','Sydney','Moscow','Cairo','Rio de Janeiro']
+const ALL_CITIES = ['Lisbon','New York','Tokyo','Paris','Sydney','Moscow',
+                    'Cairo','Rio de Janeiro', 'Passo Fundo', 'Dallas',
+                    'Lublin', 'Sananduva', 'Viseu', 'Hamburg', 'Warsaw', 
+                    'Chelm', 'Bologna', 'Cape Town', 'New Delhi']
 
 export function useFallbackCities() {
   const list = ref([]) // 

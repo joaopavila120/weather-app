@@ -17,22 +17,23 @@
     <FallbackCities
       :cities="fallback"
       @select="onSearch"
+      @shuffle="shuffleCities"
     />
   </div>
 </template>
 
 <script setup>
-import { useWeather }           from '@/composables/useWeather'
-import { useForecastTransform } from '@/composables/useForecastTransform'
-import { useInitialWeather }    from '@/composables/useInitialWeather'
+import { useWeather }            from '@/composables/useWeather'
+import { useForecastTransform }  from '@/composables/useForecastTransform'
+import { useInitialWeather }     from '@/composables/useInitialWeather'
 import { getForecastByCity, getForecastByCoords } from '@/weatherService.js'
 
-import SearchBar       from '@/components/SearchBar.vue'
-import CurrentWeather  from '@/components/CurrentWeather.vue'
-import ForecastSection from '@/components/ForecastSection.vue'
-import FallbackCities  from '@/components/FallbackCities.vue'
+import SearchBar        from '@/components/SearchBar.vue'
+import CurrentWeather   from '@/components/CurrentWeather.vue'
+import ForecastSection  from '@/components/ForecastSection.vue'
+import FallbackCities   from '@/components/FallbackCities.vue'
 
-/** Core hooks for current weather & loading state */
+/** hook - fetch */
 const {
   current,
   forecast,
@@ -42,28 +43,29 @@ const {
   fetchByCoords
 } = useWeather()
 
-/** Hook to transform raw forecast → daily summaries */
+/** hook  */
 const { transform } = useForecastTransform()
 
-/**
- * Hook to load initial weather data on mount
- * (tries geolocation → fallback cities)
- */
-const { fallback, weekly } = useInitialWeather(
+/** hook  */
+const { fallback, weekly, reloadFallback } = useInitialWeather(
   {
     fetchCurrentByCoords: fetchByCoords,
     fetchForecastByCoords: getForecastByCoords,
-    fetchCurrentByCity: fetchByCity,
-    fetchForecastByCity: getForecastByCity
+    fetchCurrentByCity:    fetchByCity,
+    fetchForecastByCity:   getForecastByCity
   },
   transform
 )
 
-/**
- * Unified search handler:
- * accepts city name (string), city object or coords object.
- */
+/** shuffle city (update button) */
+async function shuffleCities() {
+  await reloadFallback()
+}
+
+/** handler unificado de busca: city string | city obj | coords obj */
 async function onSearch(payload) {
+
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   if (typeof payload === 'string') {
     await fetchByCity(payload)
     const raw = await getForecastByCity(payload)
@@ -80,6 +82,8 @@ async function onSearch(payload) {
     const raw = await getForecastByCoords(payload.latitude, payload.longitude)
     weekly.value = transform(raw)
   }
+
+
 }
 </script>
 
@@ -89,7 +93,7 @@ async function onSearch(payload) {
 .status     { margin-top: 1rem; color: #555; }
 .status.error { color: red; }
 
-/* fade transition (leave your original) */
+/* fade transition (kept)) */
 .fade-enter-active {
   transition: opacity 0.4s ease, transform 0.4s ease;
 }
