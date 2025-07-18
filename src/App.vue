@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1 class="title">Weather Dashboard</h1>
+    <h1 class="title">Weather App</h1>
 
     <SearchBar @search="onSearch" />
 
